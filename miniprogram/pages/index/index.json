@@ -1,3 +1,6 @@
 {
-  "usingComponents": {}
+  "usingComponents": {
+    "myjikou": "../../components/myjikou/myjikou",
+    "mydish": "../../components/mydish/mydish"
+  }
 }
