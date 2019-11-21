@@ -7,6 +7,7 @@ Page({
   data: {
     roomid:"",    // 房间号
 
+
     currentIndexNav: 0,
     show1: false,
     show2: true,
@@ -173,7 +174,7 @@ Page({
     roomCollection = db.collection(this.data.roomid);
 
     // 需要对这个room表做监听操作
-    
+
   },
 
 
