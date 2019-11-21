@@ -36,7 +36,7 @@
     <view class="nav_wrap">
       <scroll-view class="nav" scroll-x>
         <view bindtap="activeNav" data-index="{{index}}" class="nav_item {{index===currentIndexNav?'active':''}}" wx:for="{{navList}}" wx:key="{{index}}">
-          {{item.name}}
+          {{item.category}}
         </view>
       </scroll-view>
     </view>
@@ -44,12 +44,12 @@
       <scroll-view class="other_list" style="height:1130rpx"scroll-y >
         <view class="list_item"wx:for="{{navList}}" wx:key="{{index}}">
           <view class="other_img_wrap">
-            <image src="../../phhto/user.png" mode="widthFix"></image>
+            <image src="{{item.featurePic}}" mode="widthFix"></image>
           </view>
           <view class="other_info">
-            <view class="other_title">{{item.name}}</view>
+            <view class="other_title">{{item.dishName}}</view>
             <view class="other_detail">
-              <text>￥{{item.price}}</text>
+              <text>￥{{item.dishPrice}}</text>
               <view class="count_box">
                 <image style="width: 49rpx;height:49rpx" src="../../icon/3.png"></image>
                 {{item.count}}

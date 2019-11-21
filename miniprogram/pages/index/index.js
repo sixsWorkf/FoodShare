@@ -6,7 +6,7 @@ Page({
    */
   data: {
     currentIndexNav: 0,
-    navList: [],
+    navList: [{}],
 
 
   },
@@ -22,15 +22,30 @@ Page({
   /**
    * 生命周期函数--监听页面加载
    */
+  getMenu: function (e){
+    var that = this
+    var navList = that.data.navList
+    wx.cloud.callFunction({
+      name: 'getMenu',
+      data: {},
+      success: function (res) {
+        //将res数组传入data的navList中
+        navList.splice(0, 1)
+        that.setData({ navList })
+        for (let i = 0; i < res.result.data.length; i++) {
+          navList.push(res.result.data[i])
+          that.setData({ navList })
+        }
+
+      },
+      fail: console.error
+    })
+      //console.log(that.data.navList) 测试写入是否成功
+  },
+
+
   onLoad: function (options) {
-      wx.cloud.callFunction({
-        name: 'getMenu',
-        success: function(res){
-            console.log(res.data)
-            
-        },
-        fail: console.error
-      })
+    this.getMenu()
   },
 
   /**
