@@ -1,10 +1,12 @@
-// pages/test/test.js
-Page({
+var that;
+var watcher;
+const db = wx.cloud.database();
+var roomCollection;
 
-  /**
-   * 页面的初始数据
-   */
+Page({
   data: {
+    roomid:"",    // 房间号
+
     currentIndexNav: 0,
     show1: false,
     show2: true,
@@ -155,59 +157,43 @@ Page({
   subdish(e){//减菜函数
 
   },
-  /**
-   * 生命周期函数--监听页面加载
-   */
+
   onLoad: function (options) {
+    that = this;
+    if (JSON.stringify(options) == '{}') {
+      console.log("options==null")
+      // 自己创建房间
+      this.setRoomId();
+    } else {
+      // 好友分享
+      this.setData({
+        roomid: options.roomid
+      });
+    }
+    roomCollection = db.collection(this.data.roomid);
 
+    // 需要对这个room表做监听操作
+    
   },
 
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
 
-  },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function () {
-
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
   onShareAppMessage: function () {
+    return {
+      title: `房间-${this.data.roomid}`,
+      path: `/pages/dbtest/dbtest?roomid=${this.data.roomid}`.toString(),
+      // path: "/pages/dbtest/dbtest?roomid=18&_id=7c47f3615dcf5ba200aea96d24cd9007",
+    }
+  },
 
+  setRoomId:function(){
+    wx.cloud.callFunction({
+      name: 'newroom'
+    }).then(res => {
+      console.log("roomid", res.result);
+      // set roomid
+      that.setData({
+        roomid: res.result
+      });
+    })
   }
 })
