@@ -44,12 +44,12 @@
      <scroll-view class="other_list" style="height:1130rpx"scroll-y >
         <view class="list_item"class="list_item {{navList[index].flavor===true?'active':''}}"wx:for="{{navList}}" wx:key="{{index}}">
           <view class="other_img_wrap">
-            <image src="../../photo/user.png" mode="widthFix"></image>
+            <image src="{{item.featurePic}}" mode="widthFix"></image>
           </view>
           <view class="other_info">
-            <view class="other_title">{{item.name}}</view>
+            <view class="other_title">{{item.dishName}}</view>
             <view class="other_detail">
-              <text>￥{{item.price}}</text>
+              <text>￥{{item.dishPrice}}</text>
               <image data-index="{{index}}" bindtap="activeorder" style="width: 49rpx;height:49rpx" src="../../icon/dislike.png"></image>
               <view class="count_box">
                 <image style="width: 49rpx;height:49rpx" bindtap="subdish"src="../../icon/3.png"></image>

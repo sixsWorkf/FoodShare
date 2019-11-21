@@ -37,65 +37,8 @@ Page({
       },
     ],
     navList: [//菜单列表
-      {
-        id: 1,
-        name: '热销菜品',
-        price: 12,
-        count: 1,
-        flavor: false
-      },
-      {
-        id: 2,
-        name: '热菜',
-        price: 12,
-        count: 1,
-        flavor: false
-      },
-      {
-        id: 3,
-        name: '凉菜',
-        price: 12,
-        count: 1,
-        flavor: false
-      },
-      {
-        id: 4,
-        name: '热菜',
-        price: 12,
-        count: 1,
-        flavor: false
-      },
-      {
-        id: 1,
-        name: '热销菜品',
-        price: 12,
-        count: 1,
-        flavor: false
-      },
-      {
-        id: 2,
-        name: '热菜',
-        price: 12,
-        count: 1,
-        flavor: false
-      },
-      {
-        id: 3,
-        name: '凉菜',
-        price: 12,
-        count: 1,
-        flavor: false
-      },
-      {
-        id: 4,
-        name: '热菜',
-        price: 12,
-        count: 1,
-        flavor: false
-      },
-
-
-    ],
+      {}
+],
     orderedList:[//已点菜的列表
 
     ],
@@ -155,11 +98,33 @@ Page({
   subdish(e){//减菜函数
 
   },
+
+  getMenu: function (e) {
+    var that = this
+    var navList = that.data.navList
+    wx.cloud.callFunction({
+      name: 'getMenu',
+      data: {},
+      success: function (res) {
+        //将res数组传入data的navList中
+        navList.splice(0, 1)
+        that.setData({ navList })
+        for (let i = 0; i < res.result.data.length; i++) {
+          navList.push(res.result.data[i])
+          that.setData({ navList })
+        }
+
+      },
+      fail: console.error
+    })
+    //console.log(that.data.navList) 测试写入是否成功
+  },
+
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-
+    this.getMenu()
   },
 
   /**
