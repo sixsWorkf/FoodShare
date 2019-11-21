@@ -33,7 +33,7 @@ page{
 .dish{
   position: absolute;
   z-index:3;
-  margin-left: -450rpx;
+  margin-left: -360rpx;
   
 }
 .img_box{

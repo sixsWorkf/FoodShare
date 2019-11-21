@@ -11,6 +11,10 @@ Component({
    * 组件的初始数据
    */
   data: {
+    show1:false,
+    show2:true,
+    animationdata2:null,
+    animationdata1: null,
     active: 1,
     activeNames: ['0'],
     indextrue: "所有",
@@ -22,7 +26,7 @@ Component({
       { name: "主食" } ,
       { name: "饮品" },
       ],
-    dish:[
+    dish:[//已点菜
       { id:"1",name: "杨枝甘露", remark: ["正常冰+半糖", "正常糖"], price: "20", num: "2" ,dishindexs:"饮品"},
       { id: "2",name: "杨枝甘露", remark: ["正常冰+半糖", "正常糖"], price: "20", num: "2", dishindexs: "凉菜"},
       { id: "3",name: "杨枝甘露", remark: ["正常冰+半糖", "正常糖"], price: "20", num: "2", dishindexs: "饮品"},
@@ -64,7 +68,7 @@ Component({
         delay: 0,
         transformOrigin: "50% 50%",
       })
-      animation2.translateX(270).opacity(1).step();
+      animation2.translateX(290).opacity(1).step();
 
       var animation1 = wx.createAnimation({
         duration: 1000,
@@ -72,7 +76,7 @@ Component({
         delay: 0,
         transformOrigin: "50% 50%",
       })
-      animation1.translateX(-10).opacity(1).step();
+      animation1.translateX(0).opacity(1).step();
 
       if (this.data.show1 == true) {
         this.setData({

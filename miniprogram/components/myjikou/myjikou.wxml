@@ -1,15 +1,42 @@
+
 <view class="myback" animation="{{animationdata2}}">
 <scroll-view class='ordererdish'style="height:150rpx" scroll-y >
-<view class="cu-bar bg-white margin-top" wx:for="{{Jikou_List}}"wx:key="{{index}}">
+<view class="cu-bar bg-white margin-top" wx:for="{{Jikou_List}}"wx:key="{{index}}" wx:for-item="Jikou_List1">
   <view class="action">
-    <text class="cuIcon-title text-orange "></text> {{item.name}}
+    <text class="cuIcon-title text-orange "></text> {{Jikou_List1.name}}
   </view>
   <view class="action">
     <button class="cu-btn bg-green shadow" bindtap="showModal" data-target="ChooseModal">Choose</button>
   </view>
 </view>
+
+<view class="cu-modal bottom-modal {{modalName=='ChooseModal'?'show':''}}" bindtap="hideModal">
+  <view class="cu-dialog" catchtap>
+    <view class="cu-bar bg-white">
+      <view class="action text-blue" bindtap="hideModal">取消</view>
+      <view class="action text-green" bindtap="hideModal">确定</view>
+    </view>
+
+
+    <view class="grid col-3 padding-sm">
+      <view wx:for="{{Jikou_List}}" wx:key="{{index}}" wx:for-item="Jikou_List2">
+<!--需要一个参数 <block wx:if="{{Jikou_List2.name==参数}}" >!-->
+      <block wx:if="{{Jikou_List2.name=='不吃'}}" >
+      <block wx:for="{{Jikou_List2.choose}}" wx:for-item="choose" >      
+        <button class="mychoose"> {{choose}}
+        </button>
+      </block>
+      </block>
+      </view>
+    </view>
+    
+    
+  </view>
+</view>
+
+
 </scroll-view>
 
-<button size="mini" class="mybu" bindtap="tap1"><image style="width: 20rpx;height:20rpx" src="/photo/左.jpg"></image></button>
+<button size="mini" class="mybu"bindtap="tap2"><image style="width: 20rpx;height:20rpx" src="../../photo/左.jpg"></image></button>
 
 </view>
