@@ -6,8 +6,7 @@ var roomCollection;
 Page({
   data: {
     roomid:"",    // 房间号
-
-
+    num: 0,       // 房间人数 
     currentIndexNav: 0,
     show1: false,
     show2: true,
@@ -170,6 +169,13 @@ Page({
       this.setData({
         roomid: options.roomid
       });
+      // 更新房间人数
+      wx.callFunction({name:'comein', data:{roomid: this.data.roomid}}).then(res=>{
+        console.log('房间人数',res.result);
+        that.setData({
+          num: res.result
+        });
+      });
     }
     roomCollection = db.collection(this.data.roomid);
 
@@ -177,15 +183,21 @@ Page({
 
   },
 
-
+  onUnload:function(options){
+    wx.cloud.callFunction({name:'leaveroom', data:{roomid: that.data.roomid}}).then(res=>{
+      console.log('某人离开，人数：', this.data.num);
+      that.setData({
+        num:res.result
+      });
+    });
+  },
   onShareAppMessage: function () {
     return {
       title: `房间-${this.data.roomid}`,
-      path: `/pages/dbtest/dbtest?roomid=${this.data.roomid}`.toString(),
-      // path: "/pages/dbtest/dbtest?roomid=18&_id=7c47f3615dcf5ba200aea96d24cd9007",
+      path: `pages/index/index?roomid=${this.data.roomid}`.toString(),
+
     }
   },
-
   setRoomId:function(){
     wx.cloud.callFunction({
       name: 'newroom'
@@ -193,7 +205,8 @@ Page({
       console.log("roomid", res.result);
       // set roomid
       that.setData({
-        roomid: res.result
+        roomid: res.result,
+        num:1
       });
     })
   }
