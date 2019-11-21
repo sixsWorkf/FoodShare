@@ -1,0 +1,67 @@
+<view class="show-info">
+  <view class="left">
+    <view class="img_box">
+      <navigator class="logo">
+        <image  style="width: 120rpx;height:120rpx" src="../../photo/user.png"></image>
+      </navigator>
+    </view>
+    <view class="ordered">
+      <text class="order_font">已点菜品</text>
+      <scroll-view class='ordererdish'style="height:968rpx" scroll-y >
+        <view wx:for="{{orderedList}}"wx:key="{{index}}">
+          <text>{{item.name}}</text>
+        </view>
+      </scroll-view>
+    </view>
+    <view class="pay_box">
+      <navigator class="pay">
+        结账
+      </navigator> 
+    </view>
+  </view>
+  <view class="right">
+    <view class="my_title">
+      <navigator class="search_box">
+        <image  style="width: 75rpx;height:75rpx" src="../../icon/1.png"></image>
+        <text>扫描菜单</text>
+      </navigator>
+      <view class="invite">
+        <image style="width: 48rpx;height:48rpx" src="../../photo/user.png"></image>
+        <image style="width: 48rpx;height:48rpx" src="../../photo/user.png"></image>
+        <image style="width: 48rpx;height:48rpx" src="../../photo/user.png"></image>
+        <image bindtap="invite" style="width: 52rpx;height:52rpx" src="../../icon/2.png"></image>
+        邀请好友
+      </view>   
+    </view>
+    <view class="nav_wrap">
+      <scroll-view class="nav" scroll-x>
+        <view bindtap="activeNav" data-index="{{index}}" class="nav_item {{index===currentIndexNav?'active':''}}" wx:for="{{spiceList}}" wx:key="{{index}}">
+          {{item.name}}
+        </view>
+      </scroll-view>
+    </view>
+    <view class="order_box">
+     <scroll-view class="other_list" style="height:1130rpx"scroll-y >
+        <view class="list_item"class="list_item {{navList[index].flavor===true?'active':''}}"wx:for="{{navList}}" wx:key="{{index}}">
+          <view class="other_img_wrap">
+            <image src="../../photo/user.png" mode="widthFix"></image>
+          </view>
+          <view class="other_info">
+            <view class="other_title">{{item.name}}</view>
+            <view class="other_detail">
+              <text>￥{{item.price}}</text>
+              <image data-index="{{index}}" bindtap="activeorder" style="width: 49rpx;height:49rpx" src="../../icon/dislike.png"></image>
+              <view class="count_box">
+                <image style="width: 49rpx;height:49rpx" bindtap="subdish"src="../../icon/3.png"></image>
+                {{item.count}}
+                <image style="width: 49rpx;height:49rpx" bindtap="adddish" src="../../icon/2.png"></image>
+              </view>
+            </view>
+          </view>
+        </view>
+      </scroll-view>
+    </view>
+  </view>
+  <myjikou class="jikou"></myjikou>
+  <mydish class="dish"></mydish>>
+</view>

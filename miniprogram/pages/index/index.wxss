@@ -1,0 +1,161 @@
+page{
+  height: 100%;
+}
+.show-info{
+  position: relative;
+  display: flex;
+  height: 100%;
+  line-height: 100%;
+  overflow: hidden;
+  z-index: 1;
+}
+.left{
+  position: absolute;
+  width: 187.5rpx;
+  height: 100%;
+  background-color: yellowgreen;
+  z-index: 4
+}
+.right{
+  margin-left: 187.5rpx;
+  position: absolute;
+  width: 562.5rpx;
+  z-index:2; 
+  height: 100%;
+  background-color: gold;
+}
+.jikou{
+  margin-left: -245rpx;
+  position: absolute;
+  z-index:3;
+ 
+}
+.dish{
+  position: absolute;
+  z-index:3;
+  margin-left: -430rpx;
+  
+}
+.img_box{
+  padding-top: 16.7rpx;
+  padding-left: 32rpx;
+  padding-bottom: 8.4rpx;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #ddd;
+  background-color: pink;
+}
+.logo{
+  justify-content: center;
+  align-items: center;
+}
+.logo image{
+  border-radius: 50%;
+}
+.long{
+ 
+  background-color: yellow;
+}
+.ordered{
+  width:100%;
+  height: 1000rpx;
+  border-bottom: 1px solid #ddd;
+  background-color: orange;
+}
+.order_font{
+  padding-left: 20rpx;
+  
+ 
+}
+.pay_box{
+
+}
+.pay{
+    display: flex;
+    justify-content: center;
+    background-color: pink;
+    color: #fff;
+    padding: 10rpx;
+}
+.my_title{
+  background-color: blue;
+  display: flex;
+  width:100%;
+  justify-content: space-between;
+}
+.search_box{
+  width: 37%;
+  background-color: red;
+}
+.invite{
+  width: 60%;
+  background-color: red;
+}
+.invite image{
+  border-radius: 50%;
+}
+.nav wrap{
+  width: 100%;
+}
+.nav{
+  width: 562.5rpx;
+  white-space: nowrap;
+  padding: 5rpx 0;
+}
+.nav_item{
+  padding:20rpx 45rpx;
+  font-size: 27rpx;
+  display: inline-block;   
+}
+.nav_item.active{
+  border-bottom: 5rpx solid #de688b;
+}
+.other_list{
+    margin-top: 10rpx;
+}
+.order_item{
+  height: 105rpx;
+  font-size: 100rpx; 
+}
+.list_item{
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10rpx;
+}
+.other_img_wrap{
+    width: 30%;
+
+    justify-content: center;
+    align-items: center;
+}
+.other_img_wrap image{
+    width: 90%;
+}
+.other_info{
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+.other_title{
+    font-size: 30rpx;
+    color: #e06f93;
+}
+.other_detail{
+  display: flex;
+  justify-content: space-between;
+}
+.count_box{
+  padding-right: 15rpx;
+}
+.order_box{
+  width: 100%;
+  height: 1150rpx;
+
+}
+.list_item.active{
+   display: flex;
+    justify-content: space-between;
+    margin-bottom: 10rpx;
+    background-color: green;
+}
