@@ -13,7 +13,6 @@ page{
   position: absolute;
   width: 187.5rpx;
   height: 100%;
-  background-color: yellowgreen;
   z-index: 4
 }
 .right{
@@ -22,7 +21,6 @@ page{
   width: 562.5rpx;
   z-index:2; 
   height: 100%;
-  background-color: gold;
 }
 .jikou{
   margin-left: -245rpx;
@@ -43,7 +41,7 @@ page{
   display: flex;
   align-items: center;
   border-bottom: 1px solid #ddd;
-  background-color: pink;
+  background-color: orange;
 }
 .logo{
   justify-content: center;
@@ -60,7 +58,7 @@ page{
   width:100%;
   height: 1000rpx;
   border-bottom: 1px solid #ddd;
-  background-color: orange;
+  background-color:orange;
 }
 .order_font{
   padding-left: 20rpx;
@@ -73,23 +71,22 @@ page{
 .pay{
     display: flex;
     justify-content: center;
-    background-color: pink;
-    color: #fff;
+    background-color: red;
     padding: 10rpx;
 }
 .my_title{
-  background-color: blue;
+  
   display: flex;
   width:100%;
   justify-content: space-between;
 }
 .search_box{
   width: 37%;
-  background-color: red;
+  background-color:
 }
 .invite{
   width: 60%;
-  background-color: red;
+  background-color:
 }
 .invite image{
   border-radius: 50%;
@@ -106,7 +103,7 @@ page{
     display: flex;
     justify-content: space-between;
     margin-bottom: 10rpx;
-    background-color:  pink;
+    background-color:  rgb(248, 247, 244);
 }
 .other_img_wrap{
     width: 30%;
@@ -125,7 +122,7 @@ page{
 }
 .other_title{
     font-size: 30rpx;
-    color: #e06f93;
+    
 }
 .other_detail{
   display: flex;
@@ -143,7 +140,7 @@ page{
    display: flex;
     justify-content: space-between;
     margin-bottom: 10rpx;
-    background-color: green;
+    background-color: rgb(204, 207, 204);
 }
 .myback1{
   height:90%;
