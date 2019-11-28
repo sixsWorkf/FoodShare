@@ -18,7 +18,8 @@
   <view class="flex text-center">
 
   <view class="margin-tb-sm1 text-center" wx:for="{{Jikou_List.choose}}" wx:for-item="choose" >
-    <button class="cu-btn  {{choose.checked?'bg-blue':'lines-blue'}}" bindtap="ChooseCheckbox" data-value="{{choose.value}}">{{choose.name1}}</button>
+    <button class="cu-btn  {{choose.checked?'bg-blue':'lines-blue'}}" bindtap="ChooseCheckbox" data-value="{{choose.value}}">{{choose.name1}}
+    </button>
   </view>
   </view>
 </scroll-view>
@@ -45,6 +46,6 @@
 </scroll-view>
 
 <view class="jikou_bottom">
-<view class="roomid text-white">房间号：{{room_id}}</view>
+<view class="roomid text-white">房间号：{{roomid}}</view>
 <view class="peoplenum text-white">当前人数：{{people_num}}</view>
 </view>

@@ -4,12 +4,11 @@ const app = getApp()
 const db = wx.cloud.database()
 Page({
 
-  /**
-   * 页面的初始数据
-   */
+
   
   data: {
     roomid: "0000",
+    num:0,
     isShowToast: false,
     active: 0,
     activeNames: ['0'],
@@ -181,15 +180,22 @@ Page({
     //console.log(that.data.navList) 测试写入是否成功
   },
   setRoomId: function () {
-    let that = this
+    let that = this;
     wx.cloud.callFunction({
       name: 'newroom'
     }).then(res => {
-      console.log("roomid", res.result);
-      // this.data.roomid = res.result
+      console.log("setroomid", res.result);
+      // set roomid
       that.setData({
-        roomid: res.result
+        roomid: res.result,
+        num: 1
       });
+      console.log('before change glabaldata', app.globalData.roomid);
+      app.globalData.roomid = res.result;
+      app.globalData.num = 1;
+      console.log('change glabaldata', app.globalData.roomid);
+    }).catch(res => {
+      console.log('setroomid', res);
     })
   },
 
@@ -274,51 +280,23 @@ Page({
   },
 
   /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function () {
-
-  },
-
-  /**
    * 生命周期函数--监听页面卸载
    */
   onUnload: function () {
 
   },
 
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {
 
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
   onShareAppMessage: function () {
-
-  }
+    return {
+      title: `房间-${this.data.roomid}`,
+      path: `pages/index/index?roomid=${this.data.roomid}`.toString(),
+    }
+  },
+  onShow: function () {
+    this.setData({
+      roomid: app.globalData.roomid,
+      num: app.globalData.num
+    })
+  },
 })

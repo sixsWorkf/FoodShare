@@ -2,9 +2,12 @@ var that;
 var watcher;
 const db = wx.cloud.database();
 var roomCollection;
+const app = getApp();
 
 Page({
   data: {
+    roomid: "",    // 房间号
+    num: 0,       // 房间人数 
     all_price:100,
     imageheight: 0,
     imagewidth: 0,
@@ -19,9 +22,6 @@ Page({
       { name: "小食" },
       { name: "甜品" },
       { name: "田园蔬菜" },],
-      
-    roomid:"",    // 房间号
-    num: 0,       // 房间人数 
     currentIndexNav: 0,
     show1: false,
     show2: true,
@@ -92,10 +92,8 @@ Page({
 
   },
 
-  /**
-   * 生命周期函数--监听页面加载
-   */
   onLoad: function (options) {
+    that = this;
     //设置像素大小
     this.imageLoad();
     let ratio = 750 / this.data.imagewidth;
@@ -104,48 +102,26 @@ Page({
       imageheight: this.data.imageheight * ratio,
       imagewidth: this.data.imagewidth * ratio
     })
-   
-  },
 
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function () {
-
-  },
-
-
-  onLoad: function (options) {
-    that = this;
     if (JSON.stringify(options) == '{}') {
-      console.log("options==null")
+      console.log("new room")
       // 自己创建房间
-      this.setRoomId();
+      that.setRoomId();
+      console.log('after setroomid');
     } else {
       // 好友分享
       this.setData({
         roomid: options.roomid
       });
+      app.globalData.roomid = options.roomid;
       // 更新房间人数
       wx.callFunction({name:'comein', data:{roomid: this.data.roomid}}).then(res=>{
         console.log('房间人数',res.result);
         that.setData({
           num: res.result
         });
+        app.globalData.num = res.result;
+        console.log('change glabaldata', app.globalData.num);
       });
     }
     roomCollection = db.collection(this.data.roomid);
@@ -160,7 +136,15 @@ Page({
       that.setData({
         num:res.result
       });
+      app.globalData.num = res.result;
     });
+  },
+  
+  onShow: function () {
+    this.setData({
+      room_id: app.globalData.roomid,
+      num: app.globalData.num
+    })
   },
   onShareAppMessage: function () {
     return {
@@ -168,17 +152,6 @@ Page({
       path: `pages/index/index?roomid=${this.data.roomid}`.toString(),
 
     }
-  },
-  setRoomId:function(){
-    wx.cloud.callFunction({
-      name: 'newroom'
-    }).then(res => {
-      console.log("roomid", res.result);
-      // set roomid
-      that.setData({
-        roomid: res.result,
-        num:1
-      });
-    })
   }
+
 })

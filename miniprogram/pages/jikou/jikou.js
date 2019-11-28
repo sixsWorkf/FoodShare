@@ -1,4 +1,7 @@
 // pages/jikou/jikou.js
+const app = getApp();
+
+var watcher;
 Page({
 
   /**
@@ -13,16 +16,28 @@ Page({
     ],
 
     room_like:[
-      { name: "不要香菜", num: 6 },
-      { name: "微辣", num: 4 },
+      { name: "不要香菜", num: 0 },
+      { name: "微辣", num: 0 },
     ],
+    num1: 0,    // 香菜
+    num6:0,     //微辣
+    roomid: app.globalData.roomid,
+    people_num: app.globalData.num,
 
-    room_id: '0014',
-    people_num: 12,
     currentIndexNav: [0],
 
   },
+
   ChooseCheckbox(e) {
+    let value = e.currentTarget.dataset.value;
+    let choose = this.getItem(value);
+    console.log('choose', choose);
+    wx.cloud.callFunction({
+      name:'JikouOfRoom',
+      data:{choose:choose, roomid: this.data.roomid}
+    })
+
+    // 我不知道后面在干什么
     let items = this.data.Jikou_List;
     let values = e.currentTarget.dataset.value;
     for (let i = 0, lenI = items.length; i < lenI; ++i) {
@@ -43,55 +58,55 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-
+    console.log('jikou onlaunch');
   },
 
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
-
+  getItem:function(value){
+    if(value>=1&&value<=4){
+      return this.data.Jikou_List[0].choose[value-1];
+    }else if(value >= 5 && value <= 9){
+      return this.data.Jikou_List[1].choose[value - 5]
+    }else if(value == 10){
+      return this.data.Jikou_List[2].choose[value - 10]
+    } else if (value == 11) {
+      return this.data.Jikou_List[3].choose[value - 11]
+    }
   },
 
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function () {
-
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
+  // zz
   onShareAppMessage: function () {
+    return {
+      title: `房间-${this.data.roomid}`,
+      path: `pages/index/index?roomid=${this.data.roomid}`.toString(),
+    }
+  },
+  onShow:function(){
+    this.setData({
+      roomid: app.globalData.roomid,
+      num:app.globalData.num
+    })
+  },
+  // 设置监听
+  onLoad:function(){
+    const flavour = wx.cloud.database().collection('rooms');
+    let that = this;
 
+    watcher = flavour.where({roomid:this.data.roomid}).limit(1).watch({
+      onChange: function (snapshot) {
+        console.log('snapshot.docChanges[0].doc', snapshot.docChanges[0].doc);
+        that.setData({
+          room_like: [{ name: "不要香菜", num: snapshot.docChanges[0].doc.香菜 }, 
+            { name: "微辣", num: snapshot.docChanges[0].doc.微辣 }]
+        });
+        // that.pageData._id = eve._id;
+        // console.log('_id', that.pageData._id)
+      },
+      onError: function (eve) {
+        console.error('the watch closed because of error', err);
+      }
+    });
+  },
+  onUnload:function(){
+    watcher.close();
   }
 })
