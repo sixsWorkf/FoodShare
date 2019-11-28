@@ -19,10 +19,8 @@ Page({
       { name: "不要香菜", num: 0 },
       { name: "微辣", num: 0 },
     ],
-    num1: 0,    // 香菜
-    num6:0,     //微辣
     roomid: app.globalData.roomid,
-    people_num: app.globalData.num,
+    people_num: 0,
 
     currentIndexNav: [0],
 
@@ -96,7 +94,8 @@ Page({
         console.log('snapshot.docChanges[0].doc', snapshot.docChanges[0].doc);
         that.setData({
           room_like: [{ name: "不要香菜", num: snapshot.docChanges[0].doc.香菜 }, 
-            { name: "微辣", num: snapshot.docChanges[0].doc.微辣 }]
+            { name: "微辣", num: snapshot.docChanges[0].doc.微辣 }],
+          people_num: snapshot.docChanges[0].doc.num
         });
         // that.pageData._id = eve._id;
         // console.log('_id', that.pageData._id)

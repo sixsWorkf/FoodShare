@@ -2,7 +2,6 @@
 App({
   globalData:{
     roomid: '0',
-    num:0
   },
   onLaunch: function () {
     console.log('app onlaunch');
@@ -19,4 +18,5 @@ App({
       })
     }
   }
+
 })

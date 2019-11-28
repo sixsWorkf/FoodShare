@@ -7,7 +7,6 @@ const app = getApp();
 Page({
   data: {
     roomid: "",    // 房间号
-    num: 0,       // 房间人数 
     all_price:100,
     imageheight: 0,
     imagewidth: 0,
@@ -114,36 +113,25 @@ Page({
         roomid: options.roomid
       });
       app.globalData.roomid = options.roomid;
-      // 更新房间人数
+      
       wx.callFunction({name:'comein', data:{roomid: this.data.roomid}}).then(res=>{
-        console.log('房间人数',res.result);
-        that.setData({
-          num: res.result
-        });
-        app.globalData.num = res.result;
-        console.log('change glabaldata', app.globalData.num);
+        console.log('comein success', res);
       });
     }
     roomCollection = db.collection(this.data.roomid);
 
-    // 需要对这个room表做监听操作
+    // todo 需要对这个room表做监听操作
 
   },
 
   onUnload:function(options){
     wx.cloud.callFunction({name:'leaveroom', data:{roomid: that.data.roomid}}).then(res=>{
-      console.log('某人离开，人数：', this.data.num);
-      that.setData({
-        num:res.result
-      });
-      app.globalData.num = res.result;
     });
   },
   
   onShow: function () {
     this.setData({
       room_id: app.globalData.roomid,
-      num: app.globalData.num
     })
   },
   onShareAppMessage: function () {
