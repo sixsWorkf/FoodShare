@@ -1,79 +1,38 @@
 <view class="show-info">
-  <view class="left">
-    <view class="img_box">
-      <navigator class="logo">
-        <image  style="width: 120rpx;height:120rpx" src="../../photo/user.png"></image>
-      </navigator>
-    </view>
-    <view class="ordered">
-      <text class="order_font">已点菜品</text>
-      <scroll-view class='ordererdish'style="height:968rpx" scroll-y >
-        <view wx:for="{{orderedList}}"wx:key="{{index}}">
-          <text>{{item.name}}</text>
-        </view>
-      </scroll-view>
-    </view>
-    <view class="pay_box">
-      <navigator class="pay">
-        结账
-      </navigator> 
-    </view>
-  </view>
   <view class="right">
-    <view class="my_title">
-      <navigator class="search_box">
-        <image  style="width: 75rpx;height:75rpx" src="../../icon/1.png"></image>
-        <text>扫描菜单</text>
-      </navigator>
-      <view class="invite">
-        <image style="width: 48rpx;height:48rpx" src="../../photo/user.png"></image>
-        <image style="width: 48rpx;height:48rpx" src="../../photo/user.png"></image>
-        <image style="width: 48rpx;height:48rpx" src="../../photo/user.png"></image>
-        <image bindtap="invite" style="width: 52rpx;height:52rpx" src="../../icon/2.png"></image>
-        邀请好友
-      </view>   
-    </view>
-    <view>
-<van-tabs active="{{ active }}" bind:change="onChange">
-<block wx:for="{{dishindexs}}" wx:for-item="dishindex">
-  <van-tab  title="{{dishindex.name}}">
-
-  <scroll-view style="height:900rpx" scroll-y >
+    <van-tabs  active="{{ active }}" bind:change="onChange">
+      <block  wx:for="{{dishindexs}}" wx:for-item="dishindex">
+      <van-tab  title="{{dishindex.name}}">
+          <scroll-view style="height:{{0.865*imageheight}}rpx" scroll-y >
   <!--我已点菜-->
   <view class="mydishes">
     <view class="box">
     <van-collapse value="{{ activeNames }}" bind:change="onChange1">
-     <block  wx:for="{{navList}}" wx:for-item="navList1" wx:key="{{index}}" >
-     <block wx:if="{{(navList1.dishindexs==dishindex.name)||dishindex.name==indextrue}}"><!-- 索引只显示自己的判断!-->
+     <block wx:for="{{dish}}" wx:for-item="dish" >
+     <block wx:if="{{(dish.dishindexs==dishindex.name)||dishindex.name==indextrue}}"><!-- 索引只显示自己的判断!-->
+                  <view style="height:{{0.13*imageheight}}rpx" class="list_item"> 
+                    <view class="mes_box">
+                      <view class="other_title text-xl text-content">{{dish.name}}</view>
+                      <view class="other_detail">
+                          <text class="text-l text-content1">点菜人：{{dish.peoplename}}</text>
 
-       <view class="list_item {{navList[navList1.id].flavor===true?'active':''}}"> 
-      
+                        <text class="text-xxl text-content2 text-red">￥{{dish.price}}</text>  
+                      </view>
+
+                    </view>
+                    <view class="delete_box">
+                      <text class="text-xl text-white">删</text>
+                      <text class="text-xl text-white">除</text>
+                    </view>
+                  </view>   
+
        
-       <view class="other_img_wrap">
-            <image src="../../photo/user.png" mode="widthFix"></image>
-          </view>
-          <view class="other_info">
-            <view class="other_title">{{navList1.name}}</view>
-            <view class="other_detail">
-              <text>￥{{navList1.price}}</text>
-              <image data-index="{{navList1.id}}" bindtap="activeorder" style="width: 49rpx;height:49rpx" src="../../icon/dislike.png"></image>
-              <view class="count_box">
-                 <image data-index="{{navList1.id}}" style="width: 49rpx;height:49rpx" bindtap="subdish"src="../../icon/3.png"></image>
-                {{navList1.num}}
-                <image  data-index="{{navList1.id}}" style="width: 49rpx;height:49rpx" bindtap="adddish" src="../../icon/2.png"></image>
-              </view>
-            </view>
-          </view>
-
-        </view>      
-        <!--<van-icon name="question-o" />-->
-        
-        
 
         
 
+       
 
-    
+
 
 
      </block>
@@ -82,13 +41,15 @@
     </view>
   </view>
   </scroll-view>
-
-  </van-tab>
-
-</block>
-</van-tabs>
-</view>
+    </van-tab>
+      </block>
+  </van-tabs>
+  <view class="pay_box">
+    <view class="all text-xxl text-content3 text-white"><text>合计：</text></view>
+    <view class="price text-xxxl text-white text-content3"><text>￥{{all_price}}</text></view>
+    <view class="pay">
+      <text class="pay_font text-white">付款·></text>
+    </view>
   </view>
-  <myjikou class="jikou"></myjikou>
-  <mydish class="dish"></mydish>>
+  </view>
 </view>

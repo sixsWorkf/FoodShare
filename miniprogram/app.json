@@ -1,15 +1,38 @@
 {
   "pages": [
     "pages/index2/index2",
-    "pages/index/index"
+    "pages/index/index",
+    "pages/jikou/jikou"
+
   ],
   "window": {
     "backgroundColor": "#F6F6F6",
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#F6F6F6",
-    "navigationBarTitleText": "云开发 QuickStart",
+    "navigationBarTitleText": "点点",
     "navigationBarTextStyle": "black"
   },
   "sitemapLocation": "sitemap.json",
-  "style": "v2"
+  "style": "v2",
+  "tabBar": {
+    "list": [{
+      "pagePath": "pages/index2/index2",
+      "text": "首页",
+      "iconPath": "icon/home.png",
+      "selectedIconPath": "icon/home1.png"
+    },
+    {
+      "pagePath": "pages/index/index",
+      "text": "已点",
+      "iconPath": "icon/ordered.png",
+      "selectedIconPath": "icon/ordered1.png"
+    },
+    {
+      "pagePath": "pages/jikou/jikou",
+      "text": "房间",
+      "iconPath": "icon/door.png",
+      "selectedIconPath": "icon/door1.png"
+    }
+    ]
+  }
 }

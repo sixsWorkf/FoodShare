@@ -1,7 +1,6 @@
 {
   "usingComponents": {
     "myjikou": "../../components/myjikou/myjikou",
-    "mydish": "../../components/mydish/mydish",
     "van-tab": "../../components/dist/tab/index",
     "van-tabs": "../../components/dist/tabs/index",
     "van-collapse": "../../components/dist/collapse/index",

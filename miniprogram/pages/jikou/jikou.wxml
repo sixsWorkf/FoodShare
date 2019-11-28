@@ -1,0 +1,50 @@
+<!--pages/jikou/jikou.wxml-->
+<view class='jikou_head solids-bottom'>
+      <view class='head_Left'>
+        <view class='touxiang_boxr'>
+          <image class='touxiang' src='../../photo/1.jpg'></image>
+        </view>
+      </view>
+ 
+      <view class="line text-white">选择我的忌口  (๑＞ڡ＜)☆~</view>
+      <view > </view>
+</view>
+
+<scroll-view class="jikou_m1" style="height: 33vh;" scroll-y>
+<block wx:for="{{Jikou_List}}" wx:for-item="Jikou_List">
+<view class="myjikou solids-bottom"> 
+<view class="name text-center ">{{Jikou_List.name}}</view>
+<scroll-view scroll-x class="choose">
+  <view class="flex text-center">
+
+  <view class="margin-tb-sm1 text-center" wx:for="{{Jikou_List.choose}}" wx:for-item="choose" >
+    <button class="cu-btn  {{choose.checked?'bg-blue':'lines-blue'}}" bindtap="ChooseCheckbox" data-value="{{choose.value}}">{{choose.name1}}</button>
+  </view>
+  </view>
+</scroll-view>
+</view>
+
+</block>
+
+</scroll-view>
+
+<view class="cu-bar bgcolor solids">
+  <view class="action">
+    <text class="cuIcon-title text-white">本房间口味偏好</text>
+  </view>
+</view>
+
+<scroll-view class="jikou_m2" style="height: 33vh;" scroll-y>
+<block wx:for="{{room_like}}" wx:for-item="room_like">
+  <view class="cu-bar1 bgcolor1 ">
+    <text class="text-blue pianhao">{{room_like.name}}X{{room_like.num}}</text>
+  </view>
+
+</block>
+
+</scroll-view>
+
+<view class="jikou_bottom">
+<view class="roomid text-white">房间号：{{room_id}}</view>
+<view class="peoplenum text-white">当前人数：{{people_num}}</view>
+</view>
