@@ -9,7 +9,7 @@ exports.main = async (event, context) => {
   const wxContext = cloud.getWXContext()
 
   var nok = 1;
-  var roomid_;
+  var roomid_ = "0000";
   // 查找没分配的roomid
   while (nok) {
     roomid_ = Math.floor(Math.random() * 10000).toString();
@@ -28,8 +28,10 @@ exports.main = async (event, context) => {
   }).catch(res => {
     console.log("add fail", res);
   });
-  // 创建新的数据库，存放这个房间的点菜记录
+  // // // 创建新的数据库，存放这个房间的点菜记录
   await db.createCollection(roomid_);
-
+  await db.createCollection(roomid_ +'.members');
+  
+  // return roomid_;
   return roomid_;
 }

@@ -1,73 +1,82 @@
-var that;
-var watcher;
-const db = wx.cloud.database();
-var roomCollection;
-const app = getApp();
-
+// pages/test/test.js
+const app = getApp()
+const db = wx.cloud.database()
 Page({
+
   data: {
-    roomid: "",    // 房间号
-    all_price:100,
+    roomid: "0",
+    openid: "",
+    checkout: 0,    //结账价格
     imageheight: 0,
     imagewidth: 0,
     active: 0,
-    activeNames: ['0'],
+    activeNames: ['0000'],
     indextrue: "所有",
     dishindexs: [
-      { name: "所有" },
-      { name: "风味菜肴" },
-      { name: "招牌菜" },
-      { name: "主食" },
-      { name: "小食" },
-      { name: "甜品" },
-      { name: "田园蔬菜" },],
-    currentIndexNav: 0,
-    show1: false,
-    show2: true,
-    animationdata1: null,
-    animationdata2: null,
-    spiceList:[//种类列表
-      {
-        id:1,
-        name:'招牌菜'
-      },
-      {
-        id: 2,
-        name: '风味菜肴'
-      },
-      {
-        id: 3,
-        name: '小食'
-      },
-      {
-        id: 4,
-        name: '主食'
-      },
-      {
-        id: 5,
-        name: '甜品'
-      },
-      {
-        id: 6,
-        name: '田园蔬菜'
-      },
+      { name: "我点的" },
+      { name: "所有" }
     ],
 
-    dish:[//已点菜
-      { id: "1", name: "杨枝甘露", remark: ["正常冰+半糖", "正常糖"], price: "20", num: "2", dishindexs: "饮品", peoplename:"帅哥"},
-      { id: "2", name: "杨枝甘露", remark: ["正常冰+半糖", "正常糖"], price: "20", num: "2", dishindexs: "凉菜", peoplename: "帅哥"},
-      { id: "3", name: "杨枝甘露", remark: ["正常冰+半糖", "正常糖"], price: "20", num: "2", dishindexs: "饮品", peoplename: "帅哥"},
-      { id: "4", name: "杨枝甘露", remark: ["正常冰+半糖", "正常糖"], price: "20", num: "2", dishindexs: "饮品", peoplename: "帅哥"},
-      { id: "5", name: "杨枝甘露", remark: ["正常冰+半糖", "正常糖"], price: "20", num: "2", dishindexs: "饮品", peoplename: "帅哥"},
-      { id: "6", name: "杨枝甘露", remark: ["正常冰+半糖", "正常糖"], price: "20", num: "2", dishindexs: "饮品", peoplename: "帅哥"},
-      { id: "7", name: "杨枝甘露", remark: ["正常冰+半糖", "正常糖"], price: "20", num: "2", dishindexs: "饮品", peoplename: "帅哥" },
-      { id: "8", name: "杨枝甘露", remark: ["正常冰+半糖", "正常糖"], price: "20", num: "2", dishindexs: "饮品", peoplename: "帅哥" },
-    ],
-
-    
-
+    orderedDish: [] //点菜表
 
   },
+
+  initWatcher: function (e) {
+    const that = this
+    const orderedDish = that.data.orderedDish
+    let checkout = that.data.checkout
+    db.collection(that.data.roomid).watch({
+      onChange: function (snapshot) {
+        console.log(snapshot.docChanges)
+        //这边一定是加菜（因为只做了加菜的功能），所以不用分情况
+        for (let i = 0; i < snapshot.docChanges.length; i++) {
+          if (snapshot.docChanges[i].dataType == "init" || snapshot.docChanges[i].dataType == "add") {
+            orderedDish.push(snapshot.docChanges[i].doc)
+            checkout += snapshot.docChanges[i].doc.dishPrice  //加钱
+          }
+          else if (snapshot.docChanges[i].dataType == "remove") {
+            checkout -= snapshot.docChanges[i].doc.dishPrice    //减钱
+            let index = 0
+            for (; index < orderedDish.length && orderedDish[index]._id != snapshot.docChanges[i].doc._id; index++) { }
+
+            if (index == orderedDish.length) console.error
+            else {
+              console.log(orderedDish[index])
+              orderedDish.splice(index, 1)
+            }
+          }
+          that.setData({ orderedDish })
+          that.setData({ checkout })
+        }
+      },
+      onError(err) {
+        console.error(err)
+      }
+    })
+  },
+
+  subdish: function (e) {
+    console.log(e)
+    let deleteID = e.currentTarget.dataset.index
+    //console.log(curIndex)
+    //let deleteID = this.data.orderedDish[curIndex]._id
+    console.log(deleteID)
+    let that = this
+    //console.log(curDish)
+    wx.cloud.callFunction({
+      name: "deleteDish",
+      data:
+      {
+        roomid: that.data.roomid,
+        deleteID: deleteID,
+      },
+      success: function (res) {
+        console.log("减菜操作完成一次")
+      },
+      fail: console.error
+    })
+  },
+
   onChange(event) {
     wx.showToast({
       title: `切换到标签 ${event.detail.name}`,
@@ -82,17 +91,16 @@ Page({
   },
   //获取屏幕大小
   imageLoad() {
-
     this.setData({
-
       imageheight: wx.getSystemInfoSync().windowHeight,
       imagewidth: wx.getSystemInfoSync().windowWidth
     })
-
   },
 
+  /**
+   * 生命周期函数--监听页面加载
+   */
   onLoad: function (options) {
-    that = this;
     //设置像素大小
     this.imageLoad();
     let ratio = 750 / this.data.imagewidth;
@@ -101,45 +109,20 @@ Page({
       imageheight: this.data.imageheight * ratio,
       imagewidth: this.data.imagewidth * ratio
     })
-
-    if (JSON.stringify(options) == '{}') {
-      console.log("new room")
-      // 自己创建房间
-      that.setRoomId();
-      console.log('after setroomid');
-    } else {
-      // 好友分享
-      this.setData({
-        roomid: options.roomid
-      });
-      app.globalData.roomid = options.roomid;
-      
-      wx.callFunction({name:'comein', data:{roomid: this.data.roomid}}).then(res=>{
-        console.log('comein success', res);
-      });
-    }
-    roomCollection = db.collection(this.data.roomid);
-
-    // todo 需要对这个room表做监听操作
-
+    this.setData({ openid: app.globalData.openid })
+    this.initWatcher()
   },
 
-  onUnload:function(options){
-    wx.cloud.callFunction({name:'leaveroom', data:{roomid: that.data.roomid}}).then(res=>{
-    });
-  },
-  
   onShow: function () {
     this.setData({
-      room_id: app.globalData.roomid,
+      roomid: app.globalData.roomid,
     })
   },
+
   onShareAppMessage: function () {
     return {
       title: `房间-${this.data.roomid}`,
-      path: `pages/index/index?roomid=${this.data.roomid}`.toString(),
-
+      path: `pages/index2/index2?roomid=${this.data.roomid}`.toString(),
     }
-  }
-
+  },
 })
