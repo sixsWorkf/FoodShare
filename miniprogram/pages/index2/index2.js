@@ -1,19 +1,15 @@
-// pages/test/test.js
 //全局变量
 const app = getApp()
 const db = wx.cloud.database()
 Page({
 
-
-  
   data: {
-    roomid: "0000",
-    num:0,
+    roomid: "0",
     isShowToast: false,
     active: 0,
     activeNames: ['0'],
     indextrue: "所有",
-    imageheight:0,
+    imageheight: 0,
     imagewidth: 0,
     dishindexs: [
       { name: "所有" },
@@ -24,6 +20,7 @@ Page({
       { name: "甜品" },
       { name: "田园蔬菜" },
     ],
+    dishCount: [],    //{key:_id, value: count}
     navList: [],
     flavorList: [{ flavor: false }, { flavor: false }],
 
@@ -31,7 +28,7 @@ Page({
     currentIndexNav: 0,
 
   },
-//弹出条
+  //弹出条
   showToast: function () {
 
     var _this = this;
@@ -62,7 +59,7 @@ Page({
 
   },
 
- //弹出示例程序
+  //弹出示例程序
 
   clickBtn: function () {
 
@@ -89,14 +86,14 @@ Page({
       activeNames: event.detail
     });
   },
- 
+
   activeNav(e) {
     // console.log(123)
     this.setData({
       currentIndexNav: e.target.dataset.index
     })
   },
- //不喜欢
+  //不喜欢
   activeorder: function (e) {
 
     let thisIdx = e.target.dataset.index;
@@ -106,12 +103,12 @@ Page({
       [playStatus]: !this.data.flavorList[thisIdx].flavor
     });
   },
-//加菜
+  //加菜
   adddish: function (e) {
     var newIndex = e.target.dataset.index
     let curDish = this.data.navList[newIndex]
     let that = this
-    //console.log(curDish)
+    console.log(curDish)
     wx.cloud.callFunction({
       name: "addDish",
       data:
@@ -121,7 +118,6 @@ Page({
         did: curDish._id,
         dname: curDish.dishName,
         dprice: curDish.dishPrice,
-
       },
       success: function (res) {
         console.log("加菜操作完成一次")
@@ -129,28 +125,9 @@ Page({
       fail: console.error
     })
   },
-  //减菜
-  subdish: function (e) {
-    let newIndex = e.target.dataset.index
-    let curDish = this.data.navList[newIndex]
-    let that = this
-    //console.log(curDish)
-    wx.cloud.callFunction({
-      name: "deleteDish",
-      data:
-      {
-        did: curDish._id,
-        roomid: that.data.roomid,
-        pname: app.globalData.openid,
-      },
-      success: function (res) {
-        console.log("减菜操作完成一次")
-      },
-      fail: console.error
-    })
-  },
+
   //获取屏幕宽高
-  imageLoad () {
+  imageLoad() {
 
     this.setData({
 
@@ -179,23 +156,20 @@ Page({
     })
     //console.log(that.data.navList) 测试写入是否成功
   },
+
   setRoomId: function () {
-    let that = this;
+    let that = this
     wx.cloud.callFunction({
       name: 'newroom'
     }).then(res => {
-      console.log("setroomid", res.result);
-      // set roomid
+      console.log("roomid", res.result);
+      // this.data.roomid = res.result
       that.setData({
-        roomid: res.result,
-        num: 1
+        roomid: res.result
       });
       console.log('before change glabaldata', app.globalData.roomid);
       app.globalData.roomid = res.result;
-      app.globalData.num = 1;
       console.log('change glabaldata', app.globalData.roomid);
-    }).catch(res => {
-      console.log('setroomid', res);
     })
   },
 
@@ -210,7 +184,9 @@ Page({
       this.setData({
         roomid: options.roomid
       });
+      app.globalData.roomid = options.roomid;
     }
+    this.initWatcher()  //初始化监听器
   },
 
   // 获取用户openid
@@ -258,31 +234,51 @@ Page({
     }
   },
 
+  //初始化监听器
+  initWatcher: function (e) {
+    const that = this
+    let dishCount = that.data.dishCount
+    db.collection(that.data.roomid).watch({
+      onChange: function (snapshot) {
+        console.log(snapshot.docChanges)
+        for (let i = 0; i < snapshot.docChanges.length; i++) {
+          if (snapshot.docChanges[i].dataType == "remove")
+            dishCount[snapshot.docChanges[i].doc.dishID] -= 1
+          else if (snapshot.docChanges[i].dataType == "add" || snapshot.docChanges[i].dataType == "init")
+            dishCount[snapshot.docChanges[i].doc.dishID] += 1
+        }
 
-  /**
-   * 生命周期函数--监听页面加载
-   */
+        that.setData({ dishCount })
+      },
+      onError(err) {
+        console.error(err)
+      }
+    })
+  },
+
+  //初始化菜量
+  initDishCount: function (e) {
+    let dishCount = this.data.dishCount
+    for (let i = 0; i < 100; i++) {
+      dishCount.push(0)
+      this.setData({ dishCount })
+    }
+  },
+
   onLoad: function (options) {
     //设置像素大小
     this.imageLoad();//获取屏幕大小
     let ratio = 750 / this.data.imagewidth;
     this.setData({
 
-      imageheight:this.data.imageheight*ratio,
-      imagewidth: this.data.imagewidth*ratio
+      imageheight: this.data.imageheight * ratio,
+      imagewidth: this.data.imagewidth * ratio
     })
     this.onGetOpenid();   //获取用户openid
-    this.createOrJoinRoom(options)  //创建或加入房间
     this.getMenu()      //加载菜单
+    this.initDishCount()  //初始化dishCount
     this.getSettings()  //获取登录头像和id
-    //this.initWatcher()//启动点菜监听
-   
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function () {
+    this.createOrJoinRoom(options)  //创建或加入房间
 
   },
 
@@ -290,13 +286,7 @@ Page({
   onShareAppMessage: function () {
     return {
       title: `房间-${this.data.roomid}`,
-      path: `pages/index/index?roomid=${this.data.roomid}`.toString(),
+      path: `pages/index2/index2?roomid=${this.data.roomid}`.toString(),
     }
-  },
-  onShow: function () {
-    this.setData({
-      roomid: app.globalData.roomid,
-      num: app.globalData.num
-    })
   },
 })

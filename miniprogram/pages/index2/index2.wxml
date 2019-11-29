@@ -23,7 +23,7 @@
                 <van-collapse value="{{ activeNames }}" bind:change="onChange1">
                   <block  wx:for="{{navList}}" wx:for-item="navList1" wx:key="{{index}}" >
                     <block wx:if="{{(navList1.category==dishindex.name)||dishindex.name==indextrue}}"><!-- 索引只显示自己的判断!-->
-                  <view class="list_item {{flavorList[navList1.id].flavor===true?'active':''}}"> 
+                  <view class="list_item {{flavorList[navList1._id].flavor===true?'active':''}}"> 
                     <view class="other_img_wrap">
                       <image src="{{navList1.featurePic}}" mode="widthFix"></image>
                     </view>
@@ -33,9 +33,10 @@
                         <text class="text-red text-xxl text-content">￥{{navList1.dishPrice}}</text>
                         <image data-index="{{navList1._id}}" bindtap="clickBtn" style="width: 49rpx;height:49rpx" src="../../icon/dislike.png"></image>
                         <view class="count_box">
-                          <image data-index="{{navList1.id}}" style="width: 45rpx;height:45rpx" bindtap="subdish"src="../../icon/-.png"></image>
-                           <text class=" text-xxl text-content1">{{navList1.num}}</text>
-                          <image  data-index="{{navList1.id}}" style="width: 45rpx;height:45rpx" bindtap="adddish" src="../../icon/+.png"></image>
+
+                          <!-- <image data-index="{{navList1._id}}" style="width: 45rpx;height:45rpx" bindtap="subdish"src="../../icon/-.png"></image> -->
+                           <text class=" text-xxl text-content1">{{dishCount[navList1._id]}}</text>
+                          <image data-index="{{navList1._id}}" style="width: 45rpx;height:45rpx" bindtap="adddish" src="../../icon/+.png"></image>
                         </view>
                       </view>
                     </view>

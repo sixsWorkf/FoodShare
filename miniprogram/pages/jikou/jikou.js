@@ -1,12 +1,7 @@
-// pages/jikou/jikou.js
 const app = getApp();
-
 var watcher;
-Page({
 
-  /**
-   * 页面的初始数据
-   */
+Page({
   data: {
     Jikou_List: [
       { name: '不吃(*╯^╰)', choose: [{ name1: "香菜", checked: false, value: 1 }, { name1: "葱", checked: false, value: 2 }, { name1: "豆制品", checked: false, value: 3 },{ name1: "大蒜", checked: false, value: 4 }] },
@@ -19,10 +14,8 @@ Page({
       { name: "不要香菜", num: 0 },
       { name: "微辣", num: 0 },
     ],
-    num1: 0,    // 香菜
-    num6:0,     //微辣
     roomid: app.globalData.roomid,
-    people_num: app.globalData.num,
+    people_num: 0,
 
     currentIndexNav: [0],
 
@@ -54,12 +47,7 @@ Page({
       Jikou_List: items
     })
   },
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad: function (options) {
-    console.log('jikou onlaunch');
-  },
+
 
   getItem:function(value){
     if(value>=1&&value<=4){
@@ -74,6 +62,7 @@ Page({
   },
 
   // zz
+
   onShareAppMessage: function () {
     return {
       title: `房间-${this.data.roomid}`,
@@ -81,22 +70,28 @@ Page({
     }
   },
   onShow:function(){
+    console.log('roomid', app.globalData.roomid);
     this.setData({
       roomid: app.globalData.roomid,
-      num:app.globalData.num
     })
   },
   // 设置监听
   onLoad:function(){
     const flavour = wx.cloud.database().collection('rooms');
     let that = this;
+    
+    console.log('roomid', app.globalData.roomid);
+    this.setData({
+      roomid: app.globalData.roomid,
+    });
 
     watcher = flavour.where({roomid:this.data.roomid}).limit(1).watch({
       onChange: function (snapshot) {
         console.log('snapshot.docChanges[0].doc', snapshot.docChanges[0].doc);
         that.setData({
           room_like: [{ name: "不要香菜", num: snapshot.docChanges[0].doc.香菜 }, 
-            { name: "微辣", num: snapshot.docChanges[0].doc.微辣 }]
+            { name: "微辣", num: snapshot.docChanges[0].doc.微辣 }],
+          people_num: snapshot.docChanges[0].doc.num
         });
         // that.pageData._id = eve._id;
         // console.log('_id', that.pageData._id)
